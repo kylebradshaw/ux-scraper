@@ -1,15 +1,16 @@
+const fs = require('fs')
 const argv = require('yargs').argv
 const Crawler = require('simplecrawler');
 
 const port = 80;
 const exclude = ['gif', 'jpg', 'jpeg', 'png', 'ico', 'bmp', 'ogg', 'webp',
   'mp4', 'webm', 'mp3', 'ttf', 'woff', 'json', 'rss', 'atom', 'gz', 'zip',
-  'rar', '7z', 'css', 'js', 'gzip', 'exe', 'svg'];
+  'rar', '7z', 'css', 'js', 'gzip', 'exe', 'svg', 'pdf'];
 const exts = exclude.join('|');
 const regex = new RegExp('\.(' + exts + ')', 'i'); // This is used for filtering crawl items.
-const crawler = new Crawler(argv.site);
+const crawler = new Crawler(argv.url);
 
-let pages = []; // This array will hold all the URLs
+let pages = new Set()
 
 // Crawler configuration
 crawler.initialPort = port;
@@ -25,10 +26,13 @@ crawler.addFetchCondition(function (parsedURL) {
 crawler.start();
 
 crawler.on('fetchcomplete', function(item, responseBuffer, response) {
-  pages.push(item.url); // Add URL to the array of pages
+  pages.add(item.url); // Add URL to the array of pages
 });
 
 crawler.on('complete', (item, responseBuffer, response) => {
-  console.log(pages, 'full page list')
+  fs.writeFile(__dirname + '/sites/' + argv.name + '/' + argv.name + '.txt', [...pages].join('\n'), (err) => {
+    if (err) throw err;
+    console.log('completed!!')
+  })
 })
 
