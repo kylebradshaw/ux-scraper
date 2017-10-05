@@ -7,7 +7,7 @@ const exclude = ['gif', 'jpg', 'jpeg', 'png', 'ico', 'bmp', 'ogg', 'webp',
   'mp4', 'webm', 'mp3', 'ttf', 'woff', 'json', 'rss', 'atom', 'gz', 'zip',
   'rar', '7z', 'css', 'js', 'gzip', 'exe', 'svg', 'pdf'];
 const exts = exclude.join('|');
-const regex = new RegExp('\.(' + exts + ')', 'i'); // This is used for filtering crawl items.
+const regex = new RegExp('\.(' + exts + ')', 'i');
 const crawler = new Crawler(argv.url);
 
 let pages = new Set()
@@ -26,7 +26,7 @@ crawler.addFetchCondition(function (parsedURL) {
 crawler.start();
 
 crawler.on('fetchcomplete', function(item, responseBuffer, response) {
-  pages.add(item.url); // Add URL to the array of pages
+  pages.add(item.url); // Add URL unique url to Set
 });
 
 crawler.on('complete', (item, responseBuffer, response) => {
