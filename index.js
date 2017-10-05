@@ -14,6 +14,8 @@ let pages = []; // This array will hold all the URLs
 // Crawler configuration
 crawler.initialPort = port;
 crawler.initalPath = '/';
+crawler.interval = 1; // seconds
+crawler.maxConcurrency = 3;
 
 crawler.addFetchCondition(function (parsedURL) {
   return !parsedURL.path.match(regex); // This will reject anything that's not a link.
@@ -24,6 +26,6 @@ crawler.start();
 
 crawler.on('fetchcomplete', function(item, responseBuffer, response) {
   pages.push(item.url); // Add URL to the array of pages
+  console.log(pages, 'pages')
 });
 
-console.log(pages, 'pages')
