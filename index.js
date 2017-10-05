@@ -26,6 +26,9 @@ crawler.start();
 
 crawler.on('fetchcomplete', function(item, responseBuffer, response) {
   pages.push(item.url); // Add URL to the array of pages
-  console.log(pages, 'pages')
 });
+
+crawler.on('complete', (item, responseBuffer, response) => {
+  console.log(pages, 'full page list')
+})
 
